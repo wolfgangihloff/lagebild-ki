@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lagebild KI</title>
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css">
+  <style>
+    :root {
+      --r-background-color: #0a0a0a;
+      --r-main-color: #e0e0e0;
+      --r-heading-color: #ffffff;
+    }
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+      font-weight: 700;
+    }
+    .reveal h1 { font-size: 2.4em; }
+    .reveal h2 { font-size: 1.6em; }
+    .reveal .subtitle {
+      color: #888;
+      font-size: 0.7em;
+      margin-top: 0.5em;
+    }
+    .reveal .highlight {
+      color: #4fc3f7;
+    }
+    .reveal ul { text-align: left; }
+    .reveal li {
+      margin-bottom: 0.4em;
+      font-size: 0.85em;
+    }
+    .reveal .timeline {
+      text-align: left;
+      font-size: 0.75em;
+    }
+    .reveal .timeline .year {
+      color: #4fc3f7;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .reveal .timeline li {
+      margin-bottom: 0.6em;
+      list-style: none;
+    }
+    .reveal .agenda-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.3em 1.5em;
+      text-align: left;
+      font-size: 0.75em;
+    }
+    .reveal .agenda-grid .time {
+      color: #4fc3f7;
+      font-family: monospace;
+      white-space: nowrap;
+    }
+    .reveal .agenda-grid .current {
+      color: #fff;
+      font-weight: bold;
+    }
+    .reveal .section-label {
+      font-size: 0.5em;
+      color: #666;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5em;
+    }
+    .reveal .emoji {
+      font-size: 1.4em;
+      margin-right: 0.3em;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ==================== TITELFOLIE ==================== -->
+      <section>
+        <h1>Lagebild <span class="highlight">KI</span></h1>
+        <p class="subtitle">Was KI heute kann &ndash; und was wir morgen damit machen</p>
+        <p class="subtitle" style="margin-top: 2em; font-size: 0.5em; color: #555;">
+          2h Praxis-Session &middot; 2026
+        </p>
+      </section>
+
+      <!-- ==================== ÜBER MICH ==================== -->
+      <section>
+        <div class="section-label">Intro</div>
+        <h2>Wolfgang Ihloff</h2>
+        <p style="color: #4fc3f7; font-size: 0.7em; margin-bottom: 1em;">
+          AI Systems Architect &middot; Fractional CTO &middot; Senticor
+        </p>
+        <ul>
+          <li><strong>20+ Jahre</strong> Cloud &amp; Distributed Systems</li>
+          <li><strong>Adobe Ethos</strong> &ndash; Devops & ML Platform f&uuml;r 3.000+ Entwickler (Document Cloud, Marketing Cloud, Sensei, Creative Cloud)</li>
+          <li><strong>Aleph Alpha</strong> &ndash; First Product Hire, Enterprise &amp; Government AI</li>
+          <li><strong>Heute:</strong> AI-native Software Factories &ndash; von Spec zu Production mit Agents</li>
+        </ul>
+        <aside class="notes">
+          Kurz: Ich baue seit 20 Jahren Plattformen. Erst Cloud, dann Big Data, ML, jetzt KI-native Systeme.
+          Bei Adobe die Entwicklungs- und Betriebsinfrastruktur für tausende Entwickler gebaut,
+          bei Aleph Alpha souveräne KI für Enterprise/Government,
+          jetzt baue ich "Dark Software Factories" – Systeme die von Spec zu Production kommen mit Agents.
+        </aside>
+      </section>
+
+      <!-- ==================== LAGEBILD: TIMELINE ==================== -->
+      <section>
+        <section>
+          <div class="section-label">Lagebild</div>
+          <h2>Wo stehen wir?</h2>
+          <p class="subtitle">Die KI-Entwicklung der letzten Jahre &ndash; im Schnelldurchlauf</p>
+        </section>
+
+        <section>
+          <h2>Die Welle</h2>
+          <ul class="timeline">
+            <li><span class="year">2022</span> &mdash; ChatGPT &ouml;ffnet die T&uuml;r. Alle reden &uuml;ber KI.</li>
+            <li><span class="year">2023</span> &mdash; GPT-4, Claude, Copilot. KI wird brauchbar f&uuml;r Code.</li>
+            <li><span class="year">2024</span> &mdash; Coding Agents, RAG, lokale Modelle. KI wird Werkzeug.</li>
+            <li><span class="year">2025</span> &mdash; Autonome Agents, Claude Code, Cursor. KI arbeitet mit.</li>
+            <li><span class="year">2026</span> &mdash; <strong>Jetzt.</strong> KI ist Teil des Workflows &ndash; nicht optional.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Was sich ver&auml;ndert hat</h2>
+          <ul>
+            <li><span class="emoji">&#x1F4AC;</span> Von <em>&ldquo;Frag die KI&rdquo;</em> &rarr; zu <em>&ldquo;Arbeite mit der KI&rdquo;</em></li>
+            <li><span class="emoji">&#x1F6E0;</span> Von Chatbot &rarr; zu <strong>Agent mit Tools</strong></li>
+            <li><span class="emoji">&#x1F4E6;</span> Von Text-Output &rarr; zu <strong>lauff&auml;higem Code, Infra, Docs</strong></li>
+            <li><span class="emoji">&#x1F9E0;</span> Von &ldquo;kann das?&rdquo; &rarr; zu <strong>&ldquo;wie setze ich das ein?&rdquo;</strong></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Die Realit&auml;t heute</h2>
+          <ul>
+            <li>KI schreibt <strong>30-80%</strong> des Codes in vielen Teams</li>
+            <li>Agents k&ouml;nnen <strong>eigenst&auml;ndig planen, umsetzen, testen</strong></li>
+            <li>Infrastruktur, Docs, Requirements &ndash; alles ist KI-f&auml;hig</li>
+            <li>Wer es nicht nutzt, <strong>verliert</strong> &ndash; nicht irgendwann, sondern jetzt</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- ==================== DAS PROJEKT ==================== -->
+      <section>
+        <section>
+          <div class="section-label">Unser Projekt</div>
+          <h2><span class="highlight">Jira Copilot</span></h2>
+          <p class="subtitle">Ein VS Code Projekt &ndash; gebaut live mit KI, direkt hier im Editor</p>
+        </section>
+
+        <section>
+          <h2>Was wir bauen</h2>
+          <ul>
+            <li>Daten aus <strong>mehreren Jira-Projekten</strong> normalisieren &amp; zusammenf&uuml;hren</li>
+            <li><strong>Daily-Vorschlag:</strong> Was hat sich ge&auml;ndert? Was ist blocked?</li>
+            <li><strong>Sprint-Vorschlag:</strong> Was passt rein? Was hat Abh&auml;ngigkeiten?</li>
+            <li><strong>Eigene Regeln:</strong> Team-Daten, Policies, Warnungen konfigurierbar</li>
+            <li><strong>Abrechnung:</strong> Zeiten pro Projekt/Person/Sprint</li>
+            <li><strong>Kapazit&auml;tenplanung:</strong> Wer ist verf&uuml;gbar, wer &uuml;berlastet?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>&ldquo;Aber Atlassian hat doch KI?&rdquo;</h2>
+          <ul>
+            <li>Kann nur <strong>zusammenfassen</strong> &ndash; nicht bauen, nicht integrieren</li>
+            <li>Lebt nur in Jira &ndash; kennt <strong>eure Word-Docs, PDFs, Sheets nicht</strong></li>
+            <li>Kein Coding Agent &ndash; wie Copilot in Office: nett, aber <strong>begrenzt</strong></li>
+            <li><strong>Teuer</strong> &ndash; und trotzdem nicht das was ihr braucht</li>
+          </ul>
+          <p class="subtitle" style="margin-top: 1em;">
+            Wir bauen etwas, das <em>eure</em> Daten, <em>eure</em> Regeln und <em>euren</em> Kontext versteht.
+          </p>
+        </section>
+
+        <section>
+          <h2>Warum genau das?</h2>
+          <ul>
+            <li>Jeder im Raum kennt die <strong>Jira-H&ouml;lle</strong></li>
+            <li>Ohne KI: <strong>Wochen</strong> Arbeit (API-Anbindung, Logik, Tests, Deployment)</li>
+            <li>Mit KI: <strong>Live in dieser Session</strong></li>
+            <li>Ihr seht den Agent arbeiten &ndash; in VS Code, in Echtzeit</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- ==================== AGENDA ==================== -->
+      <section>
+        <div class="section-label">Agenda</div>
+        <h2>Wie wir das bauen</h2>
+        <div class="agenda-grid">
+          <span class="time">20 min</span>
+          <span><strong>Requirements</strong> &ndash; KI schreibt die Spec aus unserer Feature-Liste</span>
+
+          <span class="time">25 min</span>
+          <span><strong>Anwendung</strong> &ndash; KI baut das Projekt (Jira API, Logik, Tests)</span>
+
+          <span class="time" style="opacity:0.3">&nbsp;</span>
+          <span style="opacity:0.3; font-style:italic">Pause</span>
+
+          <span class="time">20 min</span>
+          <span><strong>Dokumentation</strong> &ndash; KI generiert README, Setup Guide, Architektur-Doc</span>
+
+          <span class="time">20 min</span>
+          <span><strong>Infrastruktur</strong> &ndash; CI/CD Pipeline, Container, Deployment auf k3s</span>
+
+          <span class="time">15 min</span>
+          <span><strong>Agent als PM</strong> &ndash; Agent bekommt n&auml;chstes Feature, macht alles allein</span>
+        </div>
+        <p class="subtitle" style="margin-top: 1.5em;">Ein Projekt. F&uuml;nf Perspektiven. Alles live in VS Code.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="node_modules/reveal.js/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'fade',
+      transitionSpeed: 'fast',
+      controls: true,
+      progress: true,
+    });
+  </script>
+</body>
+</html>
