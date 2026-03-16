@@ -9,7 +9,7 @@
 ## Live-Demo
 
 1. **README generieren** – Agent analysiert den Code und schreibt eine vollständige README
-2. **Setup Guide** – Installationsanleitung, Konfiguration (.env, Jira Token)
+2. **Setup Guide** – Installationsanleitung, Konfiguration (.env, API Token)
 3. **Architecture Doc** – Wie hängt alles zusammen? Datenfluss, Komponenten
 4. **Für verschiedene Zielgruppen** – Entwickler-Doku vs. User Guide vs. Entscheider-Summary
 

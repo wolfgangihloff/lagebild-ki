@@ -1,4 +1,6 @@
-# Demo-Projekt: Jira Copilot
+# Demo-Projekt: Jira Copilot (Fallback)
+
+> **Hinweis:** Dies ist das vorbereitete Fallback-Projekt für die Session. Wird verwendet, wenn die Gruppe kein eigenes Projekt wählt.
 
 > Ein VS Code Projekt das Jira-Daten intelligent aufbereitet – gebaut live in der Session, mit KI, direkt im Editor.
 

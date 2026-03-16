@@ -1,16 +1,16 @@
 # Lagebild KI - 2h Session
 
-> Praxis-Session für Kollegen und Freunde: Wir bauen live einen "Jira Copilot" – von der Idee bis zum Deployment, komplett mit KI.
+> Praxis-Session für Kollegen und Freunde: Wir bauen live ein gemeinsam gewähltes Projekt – von der Idee bis zum Deployment, komplett mit KI.
 
-## Durchlauf-Projekt: Jira Copilot
+## Durchlauf-Projekt
 
-Ein VS Code Projekt das Jira-Daten intelligent aufbereitet: Daily-Vorschläge, Sprint-Planung, Kapazität, Abrechnung – gebaut live im Editor.
+Ein VS Code Projekt das wir gemeinsam mit den Teilnehmern bestimmen – gebaut live im Editor. Fallback-Projekt: Jira Copilot (siehe demo-projekt.md).
 
 ## Zeitplan (120 Min.)
 
 | Zeit       | Modul | Thema                                          | Dauer  |
 |------------|-------|-------------------------------------------------|--------|
-| 00:00      | Intro | Über mich, Lagebild KI, Projekt-Vorstellung     | 10 min |
+| 00:00      | Intro | Über mich, Lagebild KI, Projekt-Findung          | 10 min |
 | 00:10      | 1     | Requirements – KI schreibt die Spec              | 20 min |
 | 00:30      | 2     | Anwendung – KI baut das Projekt in VS Code       | 25 min |
 | 00:55      |       | **Pause**                                        | 5 min  |

@@ -1,49 +1,96 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" class="spectrum spectrum--light spectrum--medium">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lagebild KI</title>
+  <!-- Adobe Spectrum Design System -->
+  <link rel="stylesheet" href="node_modules/@spectrum-css/tokens/dist/css/index.css">
+  <link rel="stylesheet" href="node_modules/@spectrum-css/page/dist/index.css">
+  <link rel="stylesheet" href="node_modules/@spectrum-css/typography/dist/index.css">
+  <link rel="stylesheet" href="node_modules/@spectrum-css/divider/dist/index.css">
+  <!-- Reveal.js -->
   <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
-  <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css">
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/white.css">
+  <!-- Source Sans Pro (Adobe open-source font) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
   <style>
+    /* ── Reveal.js ↔ Spectrum token bridge ── */
     :root {
-      --r-background-color: #0a0a0a;
-      --r-main-color: #e0e0e0;
-      --r-heading-color: #ffffff;
+      --r-background-color: var(--spectrum-background-base-color, #ffffff);
+      --r-main-color: var(--spectrum-neutral-content-color-default, #4b4b4b);
+      --r-heading-color: var(--spectrum-title-color, #1d1d1d);
+      --r-link-color: var(--spectrum-accent-color-900, #0265DC);
+      --r-link-color-hover: var(--spectrum-accent-color-1000, #014caf);
+      --r-selection-background-color: var(--spectrum-accent-color-200, #b8d4f5);
+      --r-main-font: "Source Sans 3", var(--spectrum-sans-serif-font-family, sans-serif);
+      --r-heading-font: "Source Sans 3", var(--spectrum-sans-serif-font-family, sans-serif);
+      --r-heading-text-transform: none;
     }
+
+    /* ── Typography ── */
     .reveal h1, .reveal h2, .reveal h3 {
       text-transform: none;
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: -0.01em;
     }
     .reveal h1 { font-size: 2.4em; }
-    .reveal h2 { font-size: 1.6em; }
+    .reveal h2 {
+      font-size: 1.6em;
+      border-bottom: 1px solid var(--spectrum-gray-300, #dadada);
+      padding-bottom: 0.3em;
+      display: inline-block;
+    }
+    .reveal strong {
+      color: var(--spectrum-title-color, #1d1d1d);
+    }
+
+    /* ── Content ── */
     .reveal .subtitle {
-      color: #888;
+      color: var(--spectrum-gray-600, #717171);
       font-size: 0.7em;
       margin-top: 0.5em;
     }
     .reveal .highlight {
-      color: #4fc3f7;
+      color: var(--spectrum-accent-color-900, #0265DC);
     }
     .reveal ul { text-align: left; }
     .reveal li {
-      margin-bottom: 0.4em;
+      margin-bottom: 0.5em;
       font-size: 0.85em;
+      line-height: 1.6;
     }
+
+    /* ── Section labels ── */
+    .reveal .section-label {
+      font-size: 0.5em;
+      color: var(--spectrum-gray-600, #717171);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5em;
+      border-left: 3px solid var(--spectrum-accent-color-900, #0265DC);
+      padding-left: 0.5em;
+      display: inline-block;
+    }
+
+    /* ── Timeline ── */
     .reveal .timeline {
       text-align: left;
       font-size: 0.75em;
     }
     .reveal .timeline .year {
-      color: #4fc3f7;
-      font-weight: bold;
+      color: var(--spectrum-accent-color-900, #0265DC);
+      font-weight: 700;
       font-size: 1.1em;
     }
     .reveal .timeline li {
       margin-bottom: 0.6em;
       list-style: none;
     }
+
+    /* ── Agenda grid ── */
     .reveal .agenda-grid {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -52,24 +99,55 @@
       font-size: 0.75em;
     }
     .reveal .agenda-grid .time {
-      color: #4fc3f7;
+      color: var(--spectrum-accent-color-900, #0265DC);
       font-family: monospace;
       white-space: nowrap;
     }
     .reveal .agenda-grid .current {
-      color: #fff;
+      color: var(--spectrum-title-color, #1d1d1d);
       font-weight: bold;
     }
-    .reveal .section-label {
-      font-size: 0.5em;
-      color: #666;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.5em;
+
+    /* ── Icons (Material Symbols) ── */
+    .reveal .icon {
+      font-family: 'Material Symbols Outlined';
+      font-size: 1.2em;
+      vertical-align: -0.15em;
+      margin-right: 0.3em;
+      color: var(--spectrum-accent-color-900, #0265DC);
+      font-weight: normal;
+      font-style: normal;
     }
     .reveal .emoji {
       font-size: 1.4em;
       margin-right: 0.3em;
+    }
+
+
+    /* ── Links ── */
+    .reveal a {
+      color: var(--spectrum-accent-color-900, #0265DC);
+    }
+
+    /* ── Logo footer ── */
+    .logo-footer {
+      position: fixed;
+      bottom: 16px;
+      right: 24px;
+      z-index: 10;
+    }
+    .logo-footer img {
+      height: 48px;
+      opacity: 0.4;
+      mix-blend-mode: multiply;
+      object-fit: cover;
+      object-position: center 35%;
+      clip-path: inset(10% 5% 25% 5%);
+    }
+
+    /* ── Progress bar ── */
+    .reveal .progress span {
+      background: var(--spectrum-accent-color-900, #0265DC);
     }
   </style>
 </head>
@@ -90,7 +168,7 @@
       <section>
         <div class="section-label">Intro</div>
         <h2>Wolfgang Ihloff</h2>
-        <p style="color: #4fc3f7; font-size: 0.7em; margin-bottom: 1em;">
+        <p class="highlight" style="font-size: 0.7em; margin-bottom: 1em;">
           AI Systems Architect &middot; Fractional CTO &middot; Senticor
         </p>
         <ul>
@@ -129,10 +207,10 @@
         <section>
           <h2>Was sich ver&auml;ndert hat</h2>
           <ul>
-            <li><span class="emoji">&#x1F4AC;</span> Von <em>&ldquo;Frag die KI&rdquo;</em> &rarr; zu <em>&ldquo;Arbeite mit der KI&rdquo;</em></li>
-            <li><span class="emoji">&#x1F6E0;</span> Von Chatbot &rarr; zu <strong>Agent mit Tools</strong></li>
-            <li><span class="emoji">&#x1F4E6;</span> Von Text-Output &rarr; zu <strong>lauff&auml;higem Code, Infra, Docs</strong></li>
-            <li><span class="emoji">&#x1F9E0;</span> Von &ldquo;kann das?&rdquo; &rarr; zu <strong>&ldquo;wie setze ich das ein?&rdquo;</strong></li>
+            <li><span class="icon">forum</span> Von <em>&ldquo;Frag die KI&rdquo;</em> &rarr; zu <em>&ldquo;Arbeite mit der KI&rdquo;</em></li>
+            <li><span class="icon">build</span> Von Chatbot &rarr; zu <strong>Agent mit Tools</strong></li>
+            <li><span class="icon">deployed_code</span> Von Text-Output &rarr; zu <strong>lauff&auml;higem Code, Infra, Docs</strong></li>
+            <li><span class="icon">psychology</span> Von &ldquo;kann das?&rdquo; &rarr; zu <strong>&ldquo;wie setze ich das ein?&rdquo;</strong></li>
           </ul>
         </section>
 
@@ -151,44 +229,29 @@
       <section>
         <section>
           <div class="section-label">Unser Projekt</div>
-          <h2><span class="highlight">Jira Copilot</span></h2>
-          <p class="subtitle">Ein VS Code Projekt &ndash; gebaut live mit KI, direkt hier im Editor</p>
+          <h2>Was bauen <span class="highlight">wir</span>?</h2>
+          <p class="subtitle">Euer Problem. Eure Daten. Euer Projekt.</p>
+          <aside class="notes">
+            Jetzt wird's interaktiv. Wir entscheiden gemeinsam was wir in den nächsten 2h live bauen.
+          </aside>
         </section>
 
         <section>
-          <h2>Was wir bauen</h2>
+          <h2>Was nervt euch am meisten?</h2>
           <ul>
-            <li>Daten aus <strong>mehreren Jira-Projekten</strong> normalisieren &amp; zusammenf&uuml;hren</li>
-            <li><strong>Daily-Vorschlag:</strong> Was hat sich ge&auml;ndert? Was ist blocked?</li>
-            <li><strong>Sprint-Vorschlag:</strong> Was passt rein? Was hat Abh&auml;ngigkeiten?</li>
-            <li><strong>Eigene Regeln:</strong> Team-Daten, Policies, Warnungen konfigurierbar</li>
-            <li><strong>Abrechnung:</strong> Zeiten pro Projekt/Person/Sprint</li>
-            <li><strong>Kapazit&auml;tenplanung:</strong> Wer ist verf&uuml;gbar, wer &uuml;berlastet?</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>&ldquo;Aber Atlassian hat doch KI?&rdquo;</h2>
-          <ul>
-            <li>Kann nur <strong>zusammenfassen</strong> &ndash; nicht bauen, nicht integrieren</li>
-            <li>Lebt nur in Jira &ndash; kennt <strong>eure Word-Docs, PDFs, Sheets nicht</strong></li>
-            <li>Kein Coding Agent &ndash; wie Copilot in Office: nett, aber <strong>begrenzt</strong></li>
-            <li><strong>Teuer</strong> &ndash; und trotzdem nicht das was ihr braucht</li>
+            <li><span class="icon">query_stats</span> Daten aus <strong>5 Systemen</strong> zusammenf&uuml;hren?</li>
+            <li><span class="icon">description</span> Reports die niemand liest &ndash; aber <strong>alle wollen</strong>?</li>
+            <li><span class="icon">psychology</span> Prozesse die nur <strong>in eurem Kopf</strong> existieren?</li>
+            <li><span class="icon">build</span> Tools die 80% k&ouml;nnen &ndash; aber nicht die <strong>20% die ihr braucht</strong>?</li>
           </ul>
           <p class="subtitle" style="margin-top: 1em;">
-            Wir bauen etwas, das <em>eure</em> Daten, <em>eure</em> Regeln und <em>euren</em> Kontext versteht.
+            2 Minuten: Was w&uuml;rdet ihr einem Agent geben, wenn er alles k&ouml;nnte?
           </p>
+          <aside class="notes">
+            2 Min. Brainstorm. Ideen sammeln, kurz diskutieren. Dann gemeinsam ein Projekt wählen.
+          </aside>
         </section>
 
-        <section>
-          <h2>Warum genau das?</h2>
-          <ul>
-            <li>Jeder im Raum kennt die <strong>Jira-H&ouml;lle</strong></li>
-            <li>Ohne KI: <strong>Wochen</strong> Arbeit (API-Anbindung, Logik, Tests, Deployment)</li>
-            <li>Mit KI: <strong>Live in dieser Session</strong></li>
-            <li>Ihr seht den Agent arbeiten &ndash; in VS Code, in Echtzeit</li>
-          </ul>
-        </section>
       </section>
 
       <!-- ==================== AGENDA ==================== -->
@@ -200,7 +263,7 @@
           <span><strong>Requirements</strong> &ndash; KI schreibt die Spec aus unserer Feature-Liste</span>
 
           <span class="time">25 min</span>
-          <span><strong>Anwendung</strong> &ndash; KI baut das Projekt (Jira API, Logik, Tests)</span>
+          <span><strong>Anwendung</strong> &ndash; KI baut das Projekt (API-Anbindung, Logik, Tests)</span>
 
           <span class="time" style="opacity:0.3">&nbsp;</span>
           <span style="opacity:0.3; font-style:italic">Pause</span>
@@ -217,6 +280,44 @@
         <p class="subtitle" style="margin-top: 1.5em;">Ein Projekt. F&uuml;nf Perspektiven. Alles live in VS Code.</p>
       </section>
 
+      <!-- ==================== ENDE / FOLLOW-UP ==================== -->
+      <section>
+        <div class="section-label">Ende</div>
+        <h2>Danke &amp; <span class="highlight">Follow-up</span></h2>
+        <p style="font-size: 0.85em; margin-bottom: 1.5em;">
+          Fragen, Ideen, Zusammenarbeit &ndash; meldet euch jederzeit.
+        </p>
+        <ul>
+          <li><strong>Wolfgang Ihloff</strong></li>
+          <li>wolfgang@ihloff.de</li>
+          <li>AI Systems Architect &middot; Fractional CTO &middot; Senticor</li>
+        </ul>
+        <p style="margin-top: 1.5em;">
+          <a href="https://app.formbricks.com/s/cmmt5aesk4ulcul01wd1o6uaw" target="_blank"
+             style="font-size: 0.75em;">Feedback &amp; Follow-up &rarr; formbricks.com</a>
+        </p>
+      </section>
+
+      <!-- ==================== BACKUP: PROJEKT-IDEE ==================== -->
+      <section>
+        <div class="section-label">Backup</div>
+        <h2>Projekt-Idee: <span class="highlight">Jira Copilot</span></h2>
+        <ul>
+          <li>Daten aus <strong>mehreren Jira-Projekten</strong> normalisieren</li>
+          <li><strong>Daily-Vorschlag</strong> &amp; <strong>Sprint-Planung</strong></li>
+          <li><strong>Eigene Regeln</strong>, Abrechnung, Kapazit&auml;t</li>
+        </ul>
+        <p class="subtitle" style="margin-top: 1em;">
+          Jeder kennt die Jira-H&ouml;lle &ndash; ohne KI w&auml;ren das Wochen Arbeit.
+        </p>
+        <aside class="notes">
+          Nur zeigen wenn die Gruppe kein eigenes Projekt gew&auml;hlt hat. Ansonsten &uuml;berspringen.
+        </aside>
+      </section>
+
+    </div>
+    <div class="logo-footer">
+      <img src="assets/logo-ihloff.webp" alt="IHLOFF">
     </div>
   </div>
 
@@ -229,6 +330,7 @@
       transitionSpeed: 'fast',
       controls: true,
       progress: true,
+      margin: 0.12,
     });
   </script>
 </body>

@@ -8,7 +8,7 @@
 
 ## Live-Demo
 
-1. **Feature-Request:** "Füge Kapazitätenplanung hinzu – wer ist verfügbar, wer überlastet?"
+1. **Feature-Request:** Nächstes Feature aus dem Backlog (Fallback: "Füge Kapazitätenplanung hinzu" – siehe demo-projekt.md)
 2. **Agent plant:** Zerlegt in Tasks, schätzt Scope
 3. **Agent baut:** Code, Tests, Doku, Infra-Updates
 4. **Agent liefert:** PR mit allem drin

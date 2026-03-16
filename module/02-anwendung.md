@@ -9,7 +9,7 @@
 ## Live-Demo
 
 1. **Projekt aufsetzen** – Agent erstellt Projektstruktur, package.json, TypeScript-Config
-2. **Jira API anbinden** – Agent schreibt den API-Client (Auth, Endpoints, Types)
+2. **API / Datenquelle anbinden** – Agent schreibt den API-Client (Auth, Endpoints, Types)
 3. **Feature bauen** – z.B. "Daily-Vorschlag": Tickets holen, filtern, Vorschlag generieren
 4. **Tests** – Agent schreibt Tests und lässt sie laufen
 5. **Iterate** – Feedback geben, Agent passt an
@@ -17,7 +17,7 @@
 ## Talking Points
 
 - [ ] Agent liest die Spec und plant selbstständig
-- [ ] Jira REST API – normalerweise Stunden Doku lesen, Agent kennt sie
+- [ ] Externe API – normalerweise Stunden Doku lesen, Agent kennt sie
 - [ ] TDD: Agent schreibt Tests zuerst (oder danach, je nach Prompt)
 - [ ] Code-Review: Was hat der Agent gemacht? Ist es gut?
 
