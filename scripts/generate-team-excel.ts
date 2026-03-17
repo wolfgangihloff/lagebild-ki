@@ -153,7 +153,7 @@ async function generateProject2(): Promise<void> {
     { name: 'Petra Hartmann', rolle: 'Tech Lead', level: 'Principal', stunden: 40, satz: 115, projekt: 'PLATFORM, MOBILE', skills: 'Architektur, Java, Kotlin, Review' },
     { name: 'Stefan Reiter', rolle: 'Backend Dev', level: 'Senior', stunden: 40, satz: 98, projekt: 'PLATFORM', skills: 'Java, Spring Boot, Kafka, PostgreSQL' },
     { name: 'Miriam Yilmaz', rolle: 'Backend Dev', level: 'Professional', stunden: 32, satz: 88, projekt: 'PLATFORM', skills: 'Go, gRPC, Redis' },
-    { name: 'Felix Lange', rolle: 'Frontend Dev', level: 'Senior', stunden: 40, satz: 92, projekt: 'MOBILE', skills: 'React Native, TypeScript, Swift' },
+    { name: 'Felix Lange', rolle: 'Frontend Dev', level: 'Principal', stunden: 40, satz: 110, projekt: 'MOBILE', skills: 'React Native, TypeScript, Swift' },
     { name: 'Claudia Berger', rolle: 'Frontend Dev', level: 'Professional', stunden: 40, satz: 82, projekt: 'MOBILE', skills: 'React Native, JavaScript, Figma' },
     { name: 'Tobias Engel', rolle: 'Fullstack Dev', level: 'Senior', stunden: 40, satz: 90, projekt: 'PLATFORM, MOBILE', skills: 'Node.js, React, Docker, PostgreSQL' },
     { name: 'Anja Krüger', rolle: 'DevOps Engineer', level: 'Expert', stunden: 40, satz: 105, projekt: 'PLATFORM, MOBILE', skills: 'Kubernetes, Terraform, AWS, GitLab CI' },

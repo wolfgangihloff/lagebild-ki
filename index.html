@@ -564,6 +564,32 @@
           </p>
         </section>
 
+        <section>
+          <h2><span class="icon">laptop_windows</span> Windows Setup f&uuml;r Coding Agents</h2>
+          <div class="agenda-grid" style="font-size: 0.78em;">
+            <span class="icon" style="font-size: 1em;">memory</span>
+            <span><strong>Hardware:</strong> 16 GB RAM minimum, 32 GB angenehmer; 4+ CPU-Kerne; 40&ndash;50 GB freie SSD f&uuml;r WSL, Docker, Modelle, Node-Module</span>
+
+            <span class="icon" style="font-size: 1em;">computer</span>
+            <span><strong>Windows:</strong> ideal Windows 11; Windows 10 geht auch, wenn Virtualization aktiviert ist und <strong>WSL2</strong> sauber l&auml;uft</span>
+
+            <span class="icon" style="font-size: 1em;">terminal</span>
+            <span><strong>Zuerst installieren:</strong> WSL2 + Ubuntu, Windows Terminal, VS Code, Git, 1Password oder vergleichbaren Secret Manager</span>
+
+            <span class="icon" style="font-size: 1em;">download</span>
+            <span><strong>Dann in WSL:</strong> `build-essential`, `git`, `curl`, `unzip`, `zip`, `jq`, `ripgrep`, `fd-find`, `zsh`, `tmux`</span>
+
+            <span class="icon" style="font-size: 1em;">deployed_code</span>
+            <span><strong>Runtimes:</strong> Node LTS via `nvm`, Python 3 + `uv` oder `pipx`, Docker Desktop oder Rancher Desktop mit WSL-Integration</span>
+
+            <span class="icon" style="font-size: 1em;">rule</span>
+            <span><strong>Wichtig:</strong> Projekte, Package Manager, Git und Agenten <strong>in WSL</strong> ausf&uuml;hren &ndash; nicht halb in Windows, halb in Linux</span>
+          </div>
+          <p class="subtitle" style="margin-top: 1.2em;">
+            Faustregel: Windows ist Host und UI &ndash; die eigentliche Dev-Umgebung lebt in Ubuntu unter WSL2.
+          </p>
+        </section>
+
       </section>
 
       <!-- ==================== ENDE / FOLLOW-UP ==================== -->

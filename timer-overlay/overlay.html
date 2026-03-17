@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    overflow: hidden;
+    background: transparent;
+    font-family: "Source Sans 3", "SF Pro Text", -apple-system, sans-serif;
+    user-select: none;
+    -webkit-app-region: no-drag;
+  }
+  #bar {
+    display: flex;
+    align-items: stretch;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(20, 20, 22, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  }
+  .seg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 12px;
+    min-width: 0;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+    transition: background 0.15s;
+    pointer-events: auto;
+  }
+  .seg:hover { background: rgba(255,255,255,0.06); }
+  .seg.active {
+    background: rgba(2, 101, 220, 0.35);
+  }
+  .seg.done {
+    opacity: 0.35;
+  }
+  .seg.overtime .seg-time {
+    color: #ff6b6b;
+  }
+  .seg-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+  .seg-time {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+  }
+  .seg.active .seg-time {
+    color: #7cb8ff;
+    font-weight: 600;
+  }
+  #controls {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 4px;
+    pointer-events: auto;
+  }
+  #controls button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    -webkit-app-region: no-drag;
+  }
+  #controls button:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .pause-bar { display: flex; align-items: center; }
+  .pause-bar .seg-name { color: rgba(255,255,255,0.4); font-style: italic; }
+</style>
+</head>
+<body>
+<div id="bar">
+  <div id="controls">
+    <button id="btn-prev" title="Previous (&#8592;)">&#9664;</button>
+    <button id="btn-play" title="Start / Pause (Space)">&#9654;</button>
+    <button id="btn-next" title="Next (&#8594;)">&#9654;</button>
+  </div>
+</div>
+
+<script>
+const { ipcRenderer } = require("electron");
+
+// Toggle click-through: transparent areas pass clicks, bar catches them
+const barEl = document.getElementById("bar");
+barEl.addEventListener("mouseenter", () => {
+  ipcRenderer.send("set-ignore-mouse", false);
+});
+barEl.addEventListener("mouseleave", () => {
+  ipcRenderer.send("set-ignore-mouse", true);
+});
+
+const SEGMENTS = [
+  { name: "Requirements", minutes: 20 },
+  { name: "Anwendung",    minutes: 25 },
+  { name: "Pause",        minutes: 10, isPause: true },
+  { name: "Dokumentation", minutes: 20 },
+  { name: "Infrastruktur", minutes: 20 },
+  { name: "Agent als PM", minutes: 15 },
+];
+
+let currentIndex = 0;
+let running = false;
+let elapsedInSegment = 0; // seconds
+let intervalId = null;
+
+const bar = document.getElementById("bar");
+const btnPlay = document.getElementById("btn-play");
+const btnPrev = document.getElementById("btn-prev");
+const btnNext = document.getElementById("btn-next");
+
+function buildSegments() {
+  // remove old segment elements
+  bar.querySelectorAll(".seg").forEach(el => el.remove());
+
+  SEGMENTS.forEach((seg, i) => {
+    const div = document.createElement("div");
+    div.className = "seg" + (seg.isPause ? " pause-bar" : "");
+    div.dataset.index = i;
+    div.innerHTML =
+      '<div class="seg-name">' + seg.name + '</div>' +
+      '<div class="seg-time">' + seg.minutes + ':00</div>';
+    div.addEventListener("click", () => jumpTo(i));
+    bar.appendChild(div);
+  });
+}
+
+function formatTime(totalSeconds) {
+  const m = Math.floor(Math.abs(totalSeconds) / 60);
+  const s = Math.abs(totalSeconds) % 60;
+  const sign = totalSeconds < 0 ? "-" : "";
+  return sign + m + ":" + (s < 10 ? "0" : "") + s;
+}
+
+function render() {
+  const segs = bar.querySelectorAll(".seg");
+  segs.forEach((el, i) => {
+    const seg = SEGMENTS[i];
+    const timeEl = el.querySelector(".seg-time");
+
+    el.classList.remove("active", "done", "overtime");
+
+    if (i < currentIndex) {
+      el.classList.add("done");
+      timeEl.textContent = "done";
+    } else if (i === currentIndex) {
+      el.classList.add("active");
+      const remaining = seg.minutes * 60 - elapsedInSegment;
+      timeEl.textContent = formatTime(remaining);
+      if (remaining < 0) el.classList.add("overtime");
+    } else {
+      timeEl.textContent = seg.minutes + ":00";
+    }
+  });
+
+  btnPlay.innerHTML = running ? "&#10074;&#10074;" : "&#9654;";
+}
+
+function tick() {
+  elapsedInSegment++;
+  render();
+}
+
+function togglePlay() {
+  if (running) {
+    clearInterval(intervalId);
+    running = false;
+  } else {
+    intervalId = setInterval(tick, 1000);
+    running = true;
+  }
+  render();
+}
+
+function jumpTo(index) {
+  if (index < 0 || index >= SEGMENTS.length) return;
+  currentIndex = index;
+  elapsedInSegment = 0;
+  render();
+}
+
+function nextSegment() {
+  if (currentIndex < SEGMENTS.length - 1) {
+    jumpTo(currentIndex + 1);
+  }
+}
+
+function prevSegment() {
+  if (elapsedInSegment > 5) {
+    // reset current segment if more than 5s in
+    elapsedInSegment = 0;
+    render();
+  } else if (currentIndex > 0) {
+    jumpTo(currentIndex - 1);
+  }
+}
+
+btnPlay.addEventListener("click", togglePlay);
+btnNext.addEventListener("click", nextSegment);
+btnPrev.addEventListener("click", prevSegment);
+
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+  if (e.code === "ArrowRight") nextSegment();
+  if (e.code === "ArrowLeft") prevSegment();
+});
+
+buildSegments();
+render();
+</script>
+</body>
+</html>
