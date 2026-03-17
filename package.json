@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "refresh:stats": "node scripts/generate-usage-stats.js",
+    "refresh:stats:force": "node scripts/generate-usage-stats.js --force",
     "start": "npx serve .",
+    "start:fresh": "npm run refresh:stats:force && npx serve .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

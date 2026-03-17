@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-03-17",
+  "summary": {
+    "hours": 744.5,
+    "activeDays": 60,
+    "projects": 55,
+    "since": "2026-01-01"
+  },
+  "tools": [
+    {
+      "id": "claude",
+      "name": "Claude Code",
+      "hours": 400.5,
+      "activeDays": 55,
+      "projects": 45,
+      "since": "2026-01-09"
+    },
+    {
+      "id": "kiro",
+      "name": "Kiro",
+      "hours": 0,
+      "activeDays": 0,
+      "projects": 0,
+      "since": null
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "hours": 344,
+      "activeDays": 48,
+      "projects": 29,
+      "since": "2026-01-13"
+    }
+  ],
+  "note": "Seit 2026-01-01 aus lokalen Session-Logs. Projekte als eindeutige Top-Level-Workspaces unter ~/workspace."
+}

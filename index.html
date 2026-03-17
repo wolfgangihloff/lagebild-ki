@@ -135,6 +135,75 @@
       margin-right: 0.3em;
     }
 
+    /* ── Usage stats ── */
+    .reveal .stats-topline,
+    .reveal .stats-grid {
+      display: grid;
+      gap: 0.8em;
+    }
+    .reveal .stats-topline {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin: 1.2em 0 0.9em;
+    }
+    .reveal .stats-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1em;
+    }
+    .reveal .stats-card,
+    .reveal .tool-card {
+      text-align: left;
+      border: 1px solid var(--spectrum-gray-300, #dadada);
+      border-radius: 18px;
+      padding: 0.9em 1em;
+      background:
+        linear-gradient(180deg, rgba(2, 101, 220, 0.06), rgba(255, 255, 255, 0)),
+        var(--spectrum-background-base-color, #ffffff);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    }
+    .reveal .stats-card .value,
+    .reveal .tool-card .primary {
+      display: block;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: var(--spectrum-title-color, #1d1d1d);
+      line-height: 1.1;
+    }
+    .reveal .stats-card .label,
+    .reveal .tool-card .tool-since,
+    .reveal .tool-card .metric-label {
+      display: block;
+      margin-top: 0.25em;
+      font-size: 0.48em;
+      color: var(--spectrum-gray-700, #5c5c5c);
+      line-height: 1.4;
+    }
+    .reveal .tool-card .tool-name {
+      font-size: 0.65em;
+      font-weight: 700;
+      color: var(--spectrum-accent-color-900, #0265DC);
+      margin-bottom: 0.45em;
+      letter-spacing: 0.01em;
+    }
+    .reveal .tool-card .tool-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7em;
+      margin-top: 0.8em;
+      padding-top: 0.8em;
+      border-top: 1px solid var(--spectrum-gray-200, #e6e6e6);
+    }
+    .reveal .tool-card .metric-number {
+      display: block;
+      font-size: 0.72em;
+      font-weight: 700;
+      color: var(--spectrum-title-color, #1d1d1d);
+      line-height: 1.1;
+    }
+    .reveal .stats-footnote {
+      margin-top: 1em;
+      font-size: 0.5em;
+      color: var(--spectrum-gray-600, #717171);
+    }
 
     /* ── Links ── */
     .reveal a {
@@ -200,6 +269,42 @@
           bei Aleph Alpha souveräne KI für Enterprise/Government,
           jetzt baue ich "Dark Software Factories" – Systeme die von Spec zu Production kommen mit Agents.
         </aside>
+      </section>
+
+      <!-- ==================== USAGE STATS ==================== -->
+      <section>
+        <div class="section-label">Intro</div>
+        <h2>Mein AI-Footprint</h2>
+        <p class="subtitle" id="usage-stats-subtitle">
+          Lokale Nutzung von Claude Code, Kiro und Codex
+        </p>
+
+        <div class="stats-topline">
+          <div class="stats-card">
+            <span class="value" id="stats-total-hours">&mdash;</span>
+            <span class="label">gesch&auml;tzte aktive Std.</span>
+          </div>
+          <div class="stats-card">
+            <span class="value" id="stats-total-days">&mdash;</span>
+            <span class="label">aktive Tage</span>
+          </div>
+          <div class="stats-card">
+            <span class="value" id="stats-total-projects">&mdash;</span>
+            <span class="label">Projekte angefasst</span>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="tool-stats-grid">
+          <div class="tool-card">
+            <div class="tool-name">Lade lokale Statistiken ...</div>
+            <span class="primary">Bitte warten</span>
+            <div class="tool-since">Die Zahlen werden aus lokalen Logs geladen.</div>
+          </div>
+        </div>
+
+        <p class="stats-footnote" id="stats-footnote">
+          Stand wird geladen &middot; gesch&auml;tzte aktive Zeit aus lokalen Session-Logs
+        </p>
       </section>
 
       <!-- ==================== LAGEBILD: TIMELINE ==================== -->
@@ -406,14 +511,14 @@
         <p style="font-size: 0.85em; margin-bottom: 1.5em;">
           Fragen, Ideen, Zusammenarbeit &ndash; meldet euch jederzeit.
         </p>
-        <ul>
-          <li><strong>Wolfgang Ihloff</strong></li>
-          <li>wolfgang@ihloff.de</li>
-          <li>AI Systems Architect &middot; Fractional CTO &middot; Senticor</li>
+        <ul style="list-style: none; padding: 0;">
+          <li><span class="icon">person</span> <strong>Wolfgang Ihloff</strong> &middot; AI Systems Architect &middot; Fractional CTO &middot; Senticor</li>
+          <li><span class="icon">mail</span> <a href="mailto:wolfgang@ihloff.de">wolfgang@ihloff.de</a></li>
+          <li><span class="icon">group</span> <a href="https://www.linkedin.com/in/wolfgangihloff/" target="_blank">linkedin.com/in/wolfgangihloff</a></li>
         </ul>
         <p style="margin-top: 1.5em;">
           <a href="https://app.formbricks.com/s/cmmt5aesk4ulcul01wd1o6uaw" target="_blank"
-             style="font-size: 0.75em;">Feedback &amp; Follow-up &rarr; formbricks.com</a>
+             style="font-size: 0.75em;"><span class="icon">rate_review</span> Feedback &amp; Follow-up &rarr; formbricks.com</a>
         </p>
       </section>
 
@@ -442,6 +547,95 @@
 
   <script src="node_modules/reveal.js/dist/reveal.js"></script>
   <script>
+    function formatInteger(value) {
+      return new Intl.NumberFormat('de-DE', {
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function formatMonthYear(value) {
+      if (!value) {
+        return 'Lokale Historie nicht verfuegbar';
+      }
+
+      return new Date(value + 'T00:00:00Z').toLocaleDateString('de-DE', {
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC'
+      });
+    }
+
+    function formatDate(value) {
+      if (!value) {
+        return 'unbekannt';
+      }
+
+      return new Date(value + 'T00:00:00Z').toLocaleDateString('de-DE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'UTC'
+      });
+    }
+
+    function renderUsageStats(data) {
+      document.getElementById('stats-total-hours').textContent = '~' + formatInteger(data.summary.hours);
+      document.getElementById('stats-total-days').textContent = formatInteger(data.summary.activeDays);
+      document.getElementById('stats-total-projects').textContent = formatInteger(data.summary.projects);
+
+      var toolCardsHtml = data.tools.map(function(tool) {
+        var sinceLabel = tool.since
+          ? 'seit ' + formatMonthYear(tool.since)
+          : 'keine Aktivitaet im Zeitraum';
+
+        return [
+          '<div class="tool-card">',
+          '  <div class="tool-name">' + tool.name + '</div>',
+          '  <span class="primary">~' + formatInteger(tool.hours) + ' Std.</span>',
+          '  <div class="tool-since">' + sinceLabel + '</div>',
+          '  <div class="tool-metrics">',
+          '    <div>',
+          '      <span class="metric-number">' + formatInteger(tool.activeDays) + '</span>',
+          '      <span class="metric-label">aktive Tage</span>',
+          '    </div>',
+          '    <div>',
+          '      <span class="metric-number">' + formatInteger(tool.projects) + '</span>',
+          '      <span class="metric-label">Projekte</span>',
+          '    </div>',
+          '  </div>',
+          '</div>'
+        ].join('');
+      }).join('');
+
+      document.getElementById('tool-stats-grid').innerHTML = toolCardsHtml;
+      document.getElementById('usage-stats-subtitle').textContent =
+        'Lokal seit ' + formatDate(data.summary.since) + ' \u00b7 Claude Code, Kiro und Codex';
+      document.getElementById('stats-footnote').textContent =
+        'Stand ' + formatDate(data.generatedAt) + ' \u00b7 ' + data.note;
+    }
+
+    fetch('assets/usage-stats.json', { cache: 'no-store' })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Could not load local usage stats');
+        }
+        return response.json();
+      })
+      .then(renderUsageStats)
+      .catch(function() {
+        document.getElementById('usage-stats-subtitle').textContent =
+          'Lokale Nutzung konnte nicht geladen werden';
+        document.getElementById('tool-stats-grid').innerHTML = [
+          '<div class="tool-card">',
+          '  <div class="tool-name">Keine Stats-Datei gefunden</div>',
+          '  <span class="primary">npm run refresh:stats</span>',
+          '  <div class="tool-since">Dann die Deck-Ansicht neu laden.</div>',
+          '</div>'
+        ].join('');
+        document.getElementById('stats-footnote').textContent =
+          'Lokale Session-Logs konnten nicht gelesen werden.';
+      });
+
     Reveal.initialize({
       hash: true,
       slideNumber: true,
