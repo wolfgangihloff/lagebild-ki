@@ -1,6 +1,7 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { execFileSync } = require("child_process");
 
 const HOME = os.homedir();
 const WORKSPACE_ROOT = path.join(HOME, "workspace");
@@ -110,6 +111,24 @@ function minTimestamp(current, candidate) {
     return candidate;
   }
   return Math.min(current, candidate);
+}
+
+function escapeSqlString(value) {
+  return String(value).replace(/'/g, "''");
+}
+
+function readSqliteValue(dbPath, key) {
+  if (!fs.existsSync(dbPath)) {
+    return null;
+  }
+
+  try {
+    const query = `select value from ItemTable where key = '${escapeSqlString(key)}' limit 1;`;
+    const output = execFileSync("sqlite3", [dbPath, query], { encoding: "utf8" }).trim();
+    return output || null;
+  } catch {
+    return null;
+  }
 }
 
 function collectCodexStats() {
@@ -318,6 +337,187 @@ function collectKiroStats() {
   };
 }
 
+function collectGitLabStats() {
+  const sinceBoundary = parseDateStart(process.env.USAGE_STATS_SINCE || DEFAULT_SINCE_DATE);
+  const storagePath = path.join(HOME, ".gitlab", "storage.json");
+  const vscodeStatePath = path.join(
+    HOME,
+    "Library",
+    "Application Support",
+    "Code",
+    "User",
+    "globalStorage",
+    "state.vscdb"
+  );
+  const daySet = new Set();
+  const projectSet = new Set();
+  let since = null;
+
+  if (fs.existsSync(storagePath)) {
+    try {
+      const storage = JSON.parse(fs.readFileSync(storagePath, "utf8"));
+      for (const value of Object.values(storage)) {
+        if (!value || typeof value !== "object") {
+          continue;
+        }
+
+        for (const heartbeat of Object.values(value)) {
+          const timestamp = Number(heartbeat);
+          if (!Number.isFinite(timestamp) || (sinceBoundary && timestamp < sinceBoundary)) {
+            continue;
+          }
+
+          daySet.add(formatDateKey(timestamp));
+          since = minTimestamp(since, timestamp);
+        }
+      }
+    } catch {
+      // Ignore malformed local files.
+    }
+  }
+
+  if (daySet.size > 0) {
+    const rawState = readSqliteValue(vscodeStatePath, "GitLab.gitlab-workflow");
+    if (rawState) {
+      try {
+        const state = JSON.parse(rawState);
+        const selectedProjects = Array.isArray(state.selectedProjectSettings)
+          ? state.selectedProjectSettings
+          : [];
+
+        for (const projectInfo of selectedProjects) {
+          const project = normalizeProjectPath(projectInfo.repositoryRootPath);
+          if (project) {
+            projectSet.add(project);
+          }
+        }
+      } catch {
+        // Ignore malformed local state.
+      }
+    }
+  }
+
+  return {
+    id: "gitlab",
+    name: "GitLab Duo",
+    hours: 0,
+    activeDays: daySet.size,
+    projects: projectSet.size,
+    since: since ? formatDateKey(since) : null,
+    projectSet,
+    daySet,
+  };
+}
+
+function collectGeminiThreadProjects(thread, projectSet) {
+  const candidates = [];
+
+  if (Array.isArray(thread.history)) {
+    for (const item of thread.history) {
+      const currentFile = item.ideContext?.currentFile?.path;
+      if (currentFile) {
+        candidates.push(currentFile);
+      }
+
+      for (const file of item.ideContext?.otherFiles || []) {
+        if (file.path) {
+          candidates.push(file.path);
+        }
+      }
+
+      for (const filePath of item.fileUsage?.includedFiles || []) {
+        candidates.push(filePath);
+      }
+
+      if (item.openFileUri) {
+        candidates.push(item.openFileUri);
+      }
+    }
+  }
+
+  for (const candidate of candidates) {
+    const project = normalizeProjectPath(candidate);
+    if (project) {
+      projectSet.add(project);
+    }
+  }
+}
+
+function collectGeminiStats() {
+  const sinceBoundary = parseDateStart(process.env.USAGE_STATS_SINCE || DEFAULT_SINCE_DATE);
+  const vscodeStatePath = path.join(
+    HOME,
+    "Library",
+    "Application Support",
+    "Code",
+    "User",
+    "globalStorage",
+    "state.vscdb"
+  );
+  const implicitDir = path.join(HOME, ".gemini", "antigravity", "implicit");
+  const daySet = new Set();
+  const projectSet = new Set();
+  let since = null;
+
+  const rawState = readSqliteValue(vscodeStatePath, "google.geminicodeassist");
+  if (rawState) {
+    try {
+      const state = JSON.parse(rawState);
+      const threadsByAccount = state["geminiCodeAssist.chatThreads"] || {};
+
+      for (const threads of Object.values(threadsByAccount)) {
+        if (!threads || typeof threads !== "object") {
+          continue;
+        }
+
+        for (const thread of Object.values(threads)) {
+          const timestamps = [thread.create_time, thread.update_time]
+            .map(parseTimestamp)
+            .filter((timestamp) => Number.isFinite(timestamp) && (!sinceBoundary || timestamp >= sinceBoundary));
+
+          if (timestamps.length === 0) {
+            continue;
+          }
+
+          for (const timestamp of timestamps) {
+            daySet.add(formatDateKey(timestamp));
+            since = minTimestamp(since, timestamp);
+          }
+
+          collectGeminiThreadProjects(thread, projectSet);
+        }
+      }
+    } catch {
+      // Ignore malformed local state.
+    }
+  }
+
+  for (const filePath of walkFiles(implicitDir, ".pb")) {
+    try {
+      const timestamp = fs.statSync(filePath).mtimeMs;
+      if (!Number.isFinite(timestamp) || (sinceBoundary && timestamp < sinceBoundary)) {
+        continue;
+      }
+
+      daySet.add(formatDateKey(timestamp));
+      since = minTimestamp(since, timestamp);
+    } catch {
+      // Ignore local metadata files that disappear while scanning.
+    }
+  }
+
+  return {
+    id: "gemini",
+    name: "Gemini",
+    hours: 0,
+    activeDays: daySet.size,
+    projects: projectSet.size,
+    since: since ? formatDateKey(since) : null,
+    projectSet,
+    daySet,
+  };
+}
+
 function unionCount(sets) {
   const union = new Set();
   for (const values of sets) {
@@ -330,7 +530,24 @@ function unionCount(sets) {
 
 function buildOutput() {
   const sinceDate = process.env.USAGE_STATS_SINCE || DEFAULT_SINCE_DATE;
-  const tools = [collectClaudeStats(), collectKiroStats(), collectCodexStats()];
+  const tools = [
+    collectClaudeStats(),
+    collectKiroStats(),
+    collectCodexStats(),
+    collectGitLabStats(),
+    collectGeminiStats(),
+  ].sort((left, right) => {
+    if (right.hours !== left.hours) {
+      return right.hours - left.hours;
+    }
+    if (right.activeDays !== left.activeDays) {
+      return right.activeDays - left.activeDays;
+    }
+    if (right.projects !== left.projects) {
+      return right.projects - left.projects;
+    }
+    return left.name.localeCompare(right.name);
+  });
   const summary = {
     hours: roundHours(tools.reduce((sum, tool) => sum + tool.hours, 0)),
     activeDays: unionCount(tools.map((tool) => tool.daySet)),
@@ -342,7 +559,7 @@ function buildOutput() {
     generatedAt: new Date().toISOString().slice(0, 10),
     summary,
     tools: tools.map(({ projectSet, daySet, ...tool }) => tool),
-    note: `Seit ${sinceDate} aus lokalen Session-Logs. Projekte als eindeutige Top-Level-Workspaces unter ~/workspace.`,
+    note: `Seit ${sinceDate} aus lokalen Session-Logs und Editor-Metadaten. Projekte als eindeutige Top-Level-Workspaces unter ~/workspace.`,
   };
 }
 

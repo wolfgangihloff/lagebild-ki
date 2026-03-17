@@ -32,8 +32,14 @@ Standardverhalten der Statistik:
 
 - Zeitraum: ab `01.01.2026` beziehungsweise allgemein ab `01.01.<aktuelles Jahr>`
 - Cache-Dauer: `24` Stunden
-- Quelle: lokale Logs von Claude Code, Kiro und Codex
+- Quelle: lokale Logs und Editor-Metadaten fuer Claude Code, Codex, Kiro sowie leichte Zusatzspuren wie GitLab Duo oder Gemini
 - Metriken: geschätzte aktive Stunden, aktive Tage, Projekte
+
+Darstellung in der Slide:
+
+- Grosse Karten erscheinen nur fuer Tools mit belastbaren Stundenwerten.
+- Leichte Zusatzspuren ohne belastbare Stunden, aber mit Aktivitaet im Zeitraum, erscheinen nur als kleine Callouts.
+- Tools ohne Aktivitaet im Zeitraum werden ausgeblendet.
 
 Optionale Overrides:
 

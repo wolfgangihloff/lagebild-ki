@@ -204,6 +204,45 @@
       font-size: 0.5em;
       color: var(--spectrum-gray-600, #717171);
     }
+    .reveal .tool-callouts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55em;
+      margin-top: 0.75em;
+      align-items: flex-start;
+    }
+    .reveal .tool-callouts:empty {
+      display: none;
+    }
+    .reveal .tool-callouts-label {
+      width: 100%;
+      font-size: 0.4em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--spectrum-gray-700, #5c5c5c);
+    }
+    .reveal .tool-pill {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.1em;
+      text-align: left;
+      border: 1px solid var(--spectrum-gray-300, #dadada);
+      border-radius: 16px;
+      padding: 0.45em 0.7em;
+      background: rgba(2, 101, 220, 0.04);
+    }
+    .reveal .tool-pill-name {
+      font-size: 0.42em;
+      font-weight: 700;
+      color: var(--spectrum-accent-color-900, #0265DC);
+      line-height: 1.2;
+    }
+    .reveal .tool-pill-meta {
+      font-size: 0.34em;
+      color: var(--spectrum-gray-700, #5c5c5c);
+      line-height: 1.3;
+    }
 
     /* ── Links ── */
     .reveal a {
@@ -276,7 +315,7 @@
         <div class="section-label">Intro</div>
         <h2>Mein AI-Footprint</h2>
         <p class="subtitle" id="usage-stats-subtitle">
-          Lokale Nutzung von Claude Code, Kiro und Codex
+          Lokale Nutzung aus meinen Coding-Tools
         </p>
 
         <div class="stats-topline">
@@ -298,12 +337,13 @@
           <div class="tool-card">
             <div class="tool-name">Lade lokale Statistiken ...</div>
             <span class="primary">Bitte warten</span>
-            <div class="tool-since">Die Zahlen werden aus lokalen Logs geladen.</div>
+            <div class="tool-since">Die Zahlen werden aus lokalen Logs und Editor-Spuren geladen.</div>
           </div>
         </div>
+        <div class="tool-callouts" id="tool-callouts"></div>
 
         <p class="stats-footnote" id="stats-footnote">
-          Stand wird geladen &middot; gesch&auml;tzte aktive Zeit aus lokalen Session-Logs
+          Stand wird geladen &middot; lokale Session-Logs und Editor-Metadaten
         </p>
       </section>
 
@@ -512,7 +552,7 @@
           Fragen, Ideen, Zusammenarbeit &ndash; meldet euch jederzeit.
         </p>
         <ul style="list-style: none; padding: 0;">
-          <li><span class="icon">person</span> <strong>Wolfgang Ihloff</strong> &middot; AI Systems Architect &middot; Fractional CTO &middot; Senticor</li>
+          <li><span class="icon">person</span> <strong>Wolfgang Ihloff</strong> &middot; AI Systems Architect &middot; Fractional CTO</li>
           <li><span class="icon">mail</span> <a href="mailto:wolfgang@ihloff.de">wolfgang@ihloff.de</a></li>
           <li><span class="icon">group</span> <a href="https://www.linkedin.com/in/wolfgangihloff/" target="_blank">linkedin.com/in/wolfgangihloff</a></li>
         </ul>
@@ -578,12 +618,36 @@
       });
     }
 
+    function formatToolList(items) {
+      if (!items.length) {
+        return 'keine lokalen Coding-Tools';
+      }
+      if (items.length === 1) {
+        return items[0];
+      }
+      if (items.length === 2) {
+        return items[0] + ' und ' + items[1];
+      }
+
+      return items.slice(0, -1).join(', ') + ' und ' + items[items.length - 1];
+    }
+
     function renderUsageStats(data) {
+      var visibleTools = data.tools.filter(function(tool) {
+        return tool.hours > 0 || tool.activeDays > 0 || tool.projects > 0;
+      });
+      var primaryTools = visibleTools.filter(function(tool) {
+        return tool.hours > 0;
+      });
+      var secondaryTools = visibleTools.filter(function(tool) {
+        return tool.hours <= 0 && (tool.activeDays > 0 || tool.projects > 0);
+      });
+
       document.getElementById('stats-total-hours').textContent = '~' + formatInteger(data.summary.hours);
       document.getElementById('stats-total-days').textContent = formatInteger(data.summary.activeDays);
       document.getElementById('stats-total-projects').textContent = formatInteger(data.summary.projects);
 
-      var toolCardsHtml = data.tools.map(function(tool) {
+      var toolCardsHtml = primaryTools.map(function(tool) {
         var sinceLabel = tool.since
           ? 'seit ' + formatMonthYear(tool.since)
           : 'keine Aktivitaet im Zeitraum';
@@ -607,9 +671,47 @@
         ].join('');
       }).join('');
 
+      if (!toolCardsHtml) {
+        toolCardsHtml = [
+          '<div class="tool-card">',
+          '  <div class="tool-name">Keine belastbaren Stundenmetriken</div>',
+          '  <span class="primary">nur leichte Nutzung gefunden</span>',
+          '  <div class="tool-since">Weitere Tools werden unten kompakt angezeigt.</div>',
+          '</div>'
+        ].join('');
+      }
+
+      var secondaryToolsHtml = secondaryTools.length
+        ? [
+            '<div class="tool-callouts-label">Weitere Tools mit Aktivitaet</div>',
+            secondaryTools.map(function(tool) {
+              var parts = [];
+
+              if (tool.activeDays > 0) {
+                parts.push(formatInteger(tool.activeDays) + ' Tage');
+              }
+              if (tool.projects > 0) {
+                parts.push(formatInteger(tool.projects) + ' Projekte');
+              }
+              if (tool.since) {
+                parts.push('seit ' + formatMonthYear(tool.since));
+              }
+
+              return [
+                '<div class="tool-pill">',
+                '  <span class="tool-pill-name">' + tool.name + '</span>',
+                '  <span class="tool-pill-meta">' + parts.join(' &middot; ') + '</span>',
+                '</div>'
+              ].join('');
+            }).join('')
+          ].join('')
+        : '';
+
       document.getElementById('tool-stats-grid').innerHTML = toolCardsHtml;
+      document.getElementById('tool-callouts').innerHTML = secondaryToolsHtml;
       document.getElementById('usage-stats-subtitle').textContent =
-        'Lokal seit ' + formatDate(data.summary.since) + ' \u00b7 Claude Code, Kiro und Codex';
+        'Lokal seit ' + formatDate(data.summary.since) + ' \u00b7 ' +
+        formatToolList(visibleTools.map(function(tool) { return tool.name; }));
       document.getElementById('stats-footnote').textContent =
         'Stand ' + formatDate(data.generatedAt) + ' \u00b7 ' + data.note;
     }
@@ -632,6 +734,7 @@
           '  <div class="tool-since">Dann die Deck-Ansicht neu laden.</div>',
           '</div>'
         ].join('');
+        document.getElementById('tool-callouts').innerHTML = '';
         document.getElementById('stats-footnote').textContent =
           'Lokale Session-Logs konnten nicht gelesen werden.';
       });
