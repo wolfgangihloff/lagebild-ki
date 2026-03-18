@@ -6,8 +6,11 @@
   "scripts": {
     "refresh:stats": "node scripts/generate-usage-stats.js",
     "refresh:stats:force": "node scripts/generate-usage-stats.js --force",
+    "build:presentation": "node scripts/build-presentation.js --clean",
     "start": "npx serve .",
     "start:fresh": "npm run refresh:stats:force && npx serve .",
+    "start:presentation": "npm run build:presentation && npx serve presentation",
+    "meeting-notes": "node scripts/generate-meeting-notes.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
